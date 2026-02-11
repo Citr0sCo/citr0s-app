@@ -1,9 +1,9 @@
 @import "../../styles/utility/variables";
 
 .welcome-page {
-    text-align:center;
-    max-width:1000px;
-    margin:15px auto;
+    text-align: center;
+    max-width: 1000px;
+    margin: 15px auto;
 
 
     @media(max-width: $mobile-width) {
