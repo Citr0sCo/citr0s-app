@@ -1,0 +1,10 @@
+.DS_Store
+.idea/
+.angular/
+node_modules/
+dist/
+coverage/
+examples/*
+!examples/docker-compose.yml
+!examples/.env
+api/Citr0sApp.sln.DotSettings.user
