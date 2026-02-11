@@ -172,7 +172,7 @@
   resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-20.7.0.tgz#1bf24d6167ed699e0a3bc40ea6d78f22bd8b1e10"
   integrity sha512-9KPz24YoiL0SvTtTX6sd1zmysU5cKOCcmpEiXkCoO3L2oYZGlVxmMT4hfSaHMt8qmfvV2KzQMoR6DZM84BwRzQ==
 
-"@angular-eslint/eslint-plugin@^20.3.0":
+"@angular-eslint/eslint-plugin@^20.7.0":
   version "20.7.0"
   resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-20.7.0.tgz#c28ad8b66513ebcef48db7b9cf6f994d665f62b4"
   integrity sha512-aHH2YTiaonojsKN+y2z4IMugCwdsH/dYIjYBig6kfoSPyf9rGK4zx+gnNGq/pGRjF3bOYrmFgIviYpQVb80inQ==
@@ -195,7 +195,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/build@^20.3.3":
+"@angular/build@^20.3.16":
   version "20.3.16"
   resolved "https://registry.yarnpkg.com/@angular/build/-/build-20.3.16.tgz#ea33cc51483e474236190f7ef3efefca39fd6c4d"
   integrity sha512-p1W3wwMG1Bs4tkPW7ceXO4woO1KCP28sjfpBJg32dIMW3dYSC+iWNmUkYS/wb4YEkqCV0wd6Apnd98mZjL6rNg==
@@ -229,7 +229,7 @@
   optionalDependencies:
     lmdb "3.4.2"
 
-"@angular/cli@~20.3.3":
+"@angular/cli@~20.3.16":
   version "20.3.16"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-20.3.16.tgz#cdb6c0c9300a15f9bbce5e9ec1cf18f48fb0c765"
   integrity sha512-kjGp0ywIWebWrH6U5eCRkS4Tx1D/yMe2iT7DXMfEcLc8iMSrBozEriMJppbot9ou8O2LeEH5d1Nw0efNNo78Kw==
