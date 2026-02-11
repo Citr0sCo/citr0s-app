@@ -14,14 +14,21 @@ jobs:
     runs-on: self-hosted
     container:
       image: node:22
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Installing Yarn packages
-        run: yarn --prefer-offline
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Compiling FE
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --prefer-offline
+
+      - name: Build FE
         run: npm run build
 
 
@@ -45,8 +52,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Installing Yarn packages
-        run: yarn --prefer-offline
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --prefer-offline
 
       # - name: Testing FE
       #   run: npm run test-ci
@@ -72,8 +79,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Installing Yarn packages
-        run: yarn --prefer-offline
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --prefer-offline
 
       # - name: Linting FE
       #   run: npm run lint
