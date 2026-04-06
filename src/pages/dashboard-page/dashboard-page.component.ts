@@ -13,11 +13,20 @@ export class DashboardPageComponent implements AfterViewInit, OnInit, OnDestroy 
 
 
     public ngOnInit(): void {
-
+    
+        window.addEventListener('DOMContentLoaded', (e) => {
+            let iFrame = document.querySelector( '.status-iframe' );
+            this.resizeIFrameToFitContent( iFrame );
+        } );
     }
 
     public ngAfterViewInit(): void {
 
+    }
+
+    public resizeIFrameToFitContent(iFrame: any): void {
+        iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
+        iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
     }
 
     public ngOnDestroy(): void {
