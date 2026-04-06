@@ -10,3 +10,21 @@
         padding-bottom: 75px;
     }
 }
+
+.status-iframe{
+    margin: 15px auto;
+    border: none;
+    display: flex;
+    width: 800px;
+    height: 800px;
+}
+
+.isp-graph{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    img {
+        max-width: 100%;
+    }
+}
