@@ -21,6 +21,11 @@ export class DashboardPageComponent implements AfterViewInit, OnInit, OnDestroy 
 
     }
 
+    public resizeIFrameToFitContent(iFrame: any): void {
+        iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
+        iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
+    }
+
     public ngOnDestroy(): void {
         this._destroy.next();
     }
