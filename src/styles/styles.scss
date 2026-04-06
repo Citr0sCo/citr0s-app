@@ -15,8 +15,8 @@
 @import 'components/badge';
 
 body {
-    background-color: #1e293c !important;
-    color: white !important;
+    background-color: var(--body-background-color) !important;
+    color: var(--text-color) !important;
 }
 
 .text-left {
