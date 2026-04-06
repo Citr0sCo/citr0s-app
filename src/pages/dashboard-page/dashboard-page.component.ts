@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject, takeUntil} from "rxjs";
+import {Subject} from 'rxjs';
 
 @Component({
     selector: 'welcome-page',
@@ -9,24 +9,16 @@ import {Subject, takeUntil} from "rxjs";
 })
 export class DashboardPageComponent implements AfterViewInit, OnInit, OnDestroy {
 
+    public currentYear: number = 0;
+
     private readonly _destroy: Subject<void> = new Subject();
 
-
     public ngOnInit(): void {
-    
-        window.addEventListener('DOMContentLoaded', (e) => {
-            let iFrame = document.querySelector( '.status-iframe' );
-            this.resizeIFrameToFitContent( iFrame );
-        } );
+        this.currentYear = new Date().getFullYear();
     }
 
     public ngAfterViewInit(): void {
 
-    }
-
-    public resizeIFrameToFitContent(iFrame: any): void {
-        iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
-        iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
     }
 
     public ngOnDestroy(): void {
