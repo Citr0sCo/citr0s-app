@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { TimeagoModule } from 'ngx-timeago';
 import { DashboardPageComponent } from "../pages/dashboard-page/dashboard-page.component";
+import {SteamApiService} from "../services/steam-api/steam-api.service";
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { DashboardPageComponent } from "../pages/dashboard-page/dashboard-page.c
         }),
         TimeagoModule.forRoot(),
     ], providers: [
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withInterceptorsFromDi()),
+        SteamApiService
     ]
 })
 export class AppModule {
