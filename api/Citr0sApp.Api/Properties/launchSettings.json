@@ -17,7 +17,8 @@
       "applicationUrl": "https://localhost:7058;http://localhost:5187",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_BASE_URL": "https://citr0s.com"
+        "ASPNETCORE_BASE_URL": "https://citr0s.com",
+        "ASPNETCORE_STEAM_API_KEY": "50106489842A51877F24378F6452162F"
       }
     },
     "IIS Express": {

@@ -5,6 +5,29 @@
     max-width: 1000px;
     margin: 15px auto;
 
+    .user-status {
+        background-color:#333;
+        width:5px;
+        height:auto;
+        display:inline-block;
+        margin-right:5px;
+
+        &--offline {
+            background-color:#333;
+        }
+
+        &--online {
+            background-color:forestgreen;
+        }
+
+        &--busy, &--away, &--snooze {
+            background-color:orange;
+        }
+
+        &--lookingtotrade, &--lookingtoplay {
+            background-color:dodgerblue;
+        }
+    }
 
     @media(max-width: $mobile-width) {
         padding-bottom: 75px;
@@ -16,7 +39,7 @@
     border: none;
     display: flex;
     width: 100%;
-    height: 800px;
+    height: 615px;
 }
 
 .isp-graph{

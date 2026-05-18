@@ -34,7 +34,6 @@
       <Folder Include="assets\" />
       <Folder Include="Attributes\" />
       <Folder Include="Data\Records\" />
-      <Folder Include="Features\" />
       <Folder Include="Migrations\" />
       <Folder Include="wwwroot" />
     </ItemGroup>
