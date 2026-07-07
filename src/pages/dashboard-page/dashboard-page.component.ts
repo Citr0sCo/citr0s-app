@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {map, Subject, takeUntil} from 'rxjs';
 import {SteamApiService} from "../../services/steam-api/steam-api.service";
 import {ISteamUserProfile} from "../../services/steam-api/types/steam-user-profile.type";
@@ -10,6 +10,7 @@ import {SteamUserStatus} from "../../services/steam-api/types/steam-user-status.
     selector: 'welcome-page',
     templateUrl: './dashboard-page.component.html',
     styleUrls: ['./dashboard-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DashboardPageComponent implements AfterViewInit, OnInit, OnDestroy {
