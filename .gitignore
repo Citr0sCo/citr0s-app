@@ -8,3 +8,4 @@ examples/*
 !examples/docker-compose.yml
 !examples/.env
 api/Citr0sApp.sln.DotSettings.user
+api/Citr0sApp.Api/Properties/launchSettings.json
