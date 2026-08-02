@@ -101,4 +101,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t home-app . --platform linux/amd64
+        run: docker build -t citr0s-app . --platform linux/amd64
