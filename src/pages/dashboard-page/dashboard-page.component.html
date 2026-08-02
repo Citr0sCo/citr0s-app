@@ -33,7 +33,8 @@
     </section>
 
     <section class="dashboard-grid" aria-label="Dashboard overview">
-        <article class="dashboard-card activity-card">
+        <div class="dashboard-main">
+            <article class="dashboard-card activity-card">
             <div class="card-heading">
                 <div>
                     <span class="eyebrow">Steam</span>
@@ -43,7 +44,7 @@
             </div>
 
             <div class="activity-list" *ngIf="activity.games.length; else noActivity">
-                @for (game of activity.games | slice:0:4; track game.appId) {
+                @for (game of activity.games | slice:0:5; track game.appId) {
                     <a class="activity-row" [href]="'https://store.steampowered.com/app/' + game.appId" target="_blank" rel="noopener noreferrer">
                         <img [src]="game.iconUrl" [alt]="game.name + ' icon'">
                         <span class="activity-game">
@@ -57,9 +58,42 @@
             <ng-template #noActivity>
                 <p class="card-empty">No recent Steam activity is available.</p>
             </ng-template>
-        </article>
+            </article>
 
-        <article class="dashboard-card actions-card">
+            <article class="dashboard-card library-stats-card" aria-labelledby="library-stats-heading">
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">Steam library</span>
+                        <h2 id="library-stats-heading">Collection snapshot</h2>
+                    </div>
+                    <span class="card-count" *ngIf="ownedGameStats">{{ ownedGameStats.totalOwned }} owned</span>
+                </div>
+                <div class="library-stats-grid" *ngIf="ownedGameStats; else noLibraryStats">
+                    <div class="library-stat">
+                        <strong>{{ ownedGameStats.totalOwned }}</strong>
+                        <small>Total owned</small>
+                    </div>
+                    <div class="library-stat">
+                        <strong>{{ ownedGameStats.played }}</strong>
+                        <small>Played</small>
+                    </div>
+                    <div class="library-stat">
+                        <strong>{{ ownedGameStats.recentlyActive }}</strong>
+                        <small>Active recently</small>
+                    </div>
+                    <div class="library-stat">
+                        <strong>{{ ownedGameStats.neverPlayedPercentage }}%</strong>
+                        <small>Never played</small>
+                    </div>
+                </div>
+                <ng-template #noLibraryStats>
+                    <p class="card-empty">Steam library stats are currently unavailable.</p>
+                </ng-template>
+            </article>
+        </div>
+
+        <aside class="dashboard-sidebar" aria-label="Connections and game servers">
+            <article class="dashboard-card actions-card">
             <div class="card-heading">
                 <div>
                     <span class="eyebrow">Connect</span>
@@ -103,7 +137,8 @@
                 <li>Open TTD</li>
                 <li>Factorio</li>
             </ul>
-        </article>
+            </article>
+        </aside>
     </section>
 
     <section class="dashboard-card server-card" aria-labelledby="server-status-heading">

@@ -4,6 +4,7 @@ import {SteamApiService} from "../../services/steam-api/steam-api.service";
 import {ISteamUserProfile} from "../../services/steam-api/types/steam-user-profile.type";
 import {ISteamUserProfileDecoration} from "../../services/steam-api/types/steam-user-profile-decoration.type";
 import {ISteamUserActivity} from "../../services/steam-api/types/steam-user-activity.type";
+import {ISteamOwnedGameStats} from "../../services/steam-api/types/steam-owned-game-stats.type";
 import {SteamUserStatus} from "../../services/steam-api/types/steam-user-status.type";
 import {UptimeKumaService} from "../../services/uptime-kuma/uptime-kuma.service";
 import {IUptimeKumaMonitor, IUptimeKumaStatus} from "../../services/uptime-kuma/types/uptime-kuma-status.type";
@@ -22,6 +23,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     public profile: ISteamUserProfile | null = null;
     public profileDecoration: ISteamUserProfileDecoration | null = null;
     public activity: ISteamUserActivity | null = null;
+    public ownedGameStats: ISteamOwnedGameStats | null = null;
     public uptimeStatus: IUptimeKumaStatus | null = null;
     public isUptimeKumaLoading: boolean = true;
     public serverAddressCopied: boolean = false;
@@ -60,6 +62,18 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._destroy))
             .subscribe((activity) => {
                 this.activity = activity;
+            });
+
+        this._steamApiService
+            .getOwnedGameStats(this.steamUserId)
+            .pipe(takeUntil(this._destroy))
+            .subscribe({
+                next: (stats) => {
+                    this.ownedGameStats = stats;
+                },
+                error: () => {
+                    this.ownedGameStats = null;
+                }
             });
 
         this._uptimeKumaService

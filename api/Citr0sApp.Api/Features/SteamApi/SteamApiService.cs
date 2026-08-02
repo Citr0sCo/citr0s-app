@@ -63,31 +63,73 @@ public class SteamApiService
         };
     }
 
-    public async Task<SteamUserRecentlyPlayedResponse> GetRecentlyPlayed(string steamId)
+    public async Task<SteamUserOwnedGameStatsResponse> GetOwnedGameStats(string steamId)
     {
-        var apiRequest = await _httpClient.GetAsync($"{_steamApiBaseUrl}/IPlayerService/GetRecentlyPlayedGames/v0001/?key={_steamApiKey}&steamid={steamId}&format=json").ConfigureAwait(false);
-        
+        var apiRequest = await _httpClient.GetAsync($"{_steamApiBaseUrl}/IPlayerService/GetOwnedGames/v0001/?key={_steamApiKey}&steamid={steamId}&include_played_free_games=1&format=json").ConfigureAwait(false);
         var apiResponse = await apiRequest.Content.ReadAsStringAsync();
-        
-        var parsedResponse = JsonConvert.DeserializeObject<SteamApiUserRecentlyPlayedResponse>(apiResponse);
-
-        var response = new SteamUserRecentlyPlayedResponse();
-        
-        if (parsedResponse?.Response.Games.Count == 0)
+        var parsedResponse = JsonConvert.DeserializeObject<SteamApiUserOwnedGamesResponse>(apiResponse);
+        if (parsedResponse?.Response?.Games == null)
         {
+            var response = new SteamUserOwnedGameStatsResponse();
             response.AddError(new Error
             {
                 Code = ErrorCode.ThirdPartyApiError,
-                UserMessage = "No gmaes found for steamId " + steamId,
-                TechnicalMessage = "No games found for steamId " + steamId
+                UserMessage = "Steam library stats are unavailable for steamId " + steamId,
+                TechnicalMessage = "Steam owned games were not returned for steamId " + steamId
+            });
+            return response;
+        }
+
+        var games = parsedResponse.Response.Games;
+        var totalOwned = games.Count;
+        var played = games.Count(game => game.PlaytimeForever > 0);
+        var recentlyActive = games.Count(game => game.Playtime2weeks > 0);
+        var neverPlayed = totalOwned - played;
+
+        return new SteamUserOwnedGameStatsResponse
+        {
+            TotalOwned = totalOwned,
+            Played = played,
+            NeverPlayed = neverPlayed,
+            RecentlyActive = recentlyActive,
+            PlayedPercentage = GetPercentage(played, totalOwned),
+            NeverPlayedPercentage = GetPercentage(neverPlayed, totalOwned)
+        };
+    }
+
+    private static double GetPercentage(int count, int total)
+    {
+        return total == 0 ? 0 : Math.Round(count * 100d / total, 1);
+    }
+
+    public async Task<SteamUserRecentlyPlayedResponse> GetRecentlyPlayed(string steamId)
+    {
+        var apiRequest = await _httpClient.GetAsync($"{_steamApiBaseUrl}/IPlayerService/GetOwnedGames/v0001/?key={_steamApiKey}&steamid={steamId}&include_appinfo=1&include_played_free_games=1&format=json").ConfigureAwait(false);
+
+        var apiResponse = await apiRequest.Content.ReadAsStringAsync();
+        var parsedResponse = JsonConvert.DeserializeObject<SteamApiUserOwnedGamesResponse>(apiResponse);
+        var recentlyPlayedGames = parsedResponse?.Response?.Games?
+            .Where(game => game.Playtime2weeks > 0 && game.RtimeLastPlayed > 0)
+            .OrderByDescending(game => game.RtimeLastPlayed)
+            .Take(5)
+            .ToList() ?? new List<SteamApiUserOwnedGamesResponse.Game>();
+
+        if (recentlyPlayedGames.Count == 0)
+        {
+            var response = new SteamUserRecentlyPlayedResponse();
+            response.AddError(new Error
+            {
+                Code = ErrorCode.ThirdPartyApiError,
+                UserMessage = "No games found for steamId " + steamId,
+                TechnicalMessage = "No recently played games found for steamId " + steamId
             });
             return response;
         }
 
         return new SteamUserRecentlyPlayedResponse
         {
-            Total = parsedResponse!.Response.TotalCount,
-            Games = parsedResponse!.Response.Games.ConvertAll(game => new SteamGameSummary
+            Total = recentlyPlayedGames.Count,
+            Games = recentlyPlayedGames.ConvertAll(game => new SteamGameSummary
             {
                 AppId = game.Appid,
                 Name = game.Name,
