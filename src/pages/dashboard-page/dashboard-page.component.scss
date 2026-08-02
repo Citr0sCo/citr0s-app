@@ -194,8 +194,33 @@
 .dashboard-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+    align-items: stretch;
     gap: 22px;
     margin-bottom: 22px;
+}
+
+.dashboard-main,
+.dashboard-sidebar {
+    min-width: 0;
+}
+
+.dashboard-main {
+    display: flex;
+}
+
+.dashboard-main > .dashboard-card {
+    width: 100%;
+    flex: 1;
+}
+
+.dashboard-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.dashboard-sidebar > .dashboard-card {
+    width: 100%;
 }
 
 .dashboard-card {
@@ -619,6 +644,15 @@
     }
 
     .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .dashboard-sidebar {
+        gap: 16px;
+    }
+
+    .game-server-list {
         grid-template-columns: 1fr;
     }
 
