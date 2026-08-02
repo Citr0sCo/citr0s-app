@@ -157,6 +157,19 @@
     line-height: 1.7;
 }
 
+.profile-link {
+    display: inline-flex;
+    margin-top: 16px;
+    color: #b697ff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.profile-link:hover {
+    color: #d4c9ff;
+}
+
 .hero-metric {
     min-width: 150px;
     padding: 16px 0 2px;
@@ -314,9 +327,98 @@
     height: 21px;
 }
 
+.action-icon--teamspeak {
+    background: rgba(113, 217, 223, 0.18);
+}
+
+.action-icon--teamspeak img {
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+}
+
 .action-arrow {
     color: rgba(255, 255, 255, 0.4);
     font-size: 1rem;
+}
+
+.game-servers-card {
+    padding-top: 22px;
+}
+
+.server-address-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 11px 12px;
+    background: rgba(137, 87, 229, 0.08);
+    border: 1px solid rgba(137, 87, 229, 0.2);
+    border-radius: 10px;
+}
+
+.server-address-row small,
+.server-address-row code {
+    display: block;
+}
+
+.server-address-row small {
+    margin-bottom: 4px;
+    color: rgba(255, 255, 255, 0.42);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.server-address-row code {
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.78rem;
+}
+
+.server-ip-copy {
+    flex: 0 0 auto;
+    padding: 7px 9px;
+    color: #c6b7ff;
+    background: transparent;
+    border: 1px solid rgba(198, 183, 255, 0.35);
+    border-radius: 7px;
+    font-size: 0.65rem;
+    cursor: pointer;
+}
+
+.server-ip-copy:hover {
+    color: #fff;
+    background: rgba(137, 87, 229, 0.18);
+    border-color: #b697ff;
+}
+
+.game-server-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.game-server-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.74rem;
+}
+
+.game-server-list li::before {
+    width: 5px;
+    height: 5px;
+    flex: 0 0 auto;
+    content: '';
+    background: $success-color;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.55);
 }
 
 .server-card {
