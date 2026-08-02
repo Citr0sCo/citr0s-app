@@ -59,6 +59,37 @@
                 <p class="card-empty">No recent Steam activity is available.</p>
             </ng-template>
             </article>
+
+            <article class="dashboard-card library-stats-card" aria-labelledby="library-stats-heading">
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">Steam library</span>
+                        <h2 id="library-stats-heading">Collection snapshot</h2>
+                    </div>
+                    <span class="card-count" *ngIf="ownedGameStats">{{ ownedGameStats.totalOwned }} owned</span>
+                </div>
+                <div class="library-stats-grid" *ngIf="ownedGameStats; else noLibraryStats">
+                    <div class="library-stat">
+                        <strong>{{ ownedGameStats.totalOwned }}</strong>
+                        <small>Total owned</small>
+                    </div>
+                    <div class="library-stat">
+                        <strong>{{ ownedGameStats.played }}</strong>
+                        <small>Played</small>
+                    </div>
+                    <div class="library-stat">
+                        <strong>{{ ownedGameStats.recentlyActive }}</strong>
+                        <small>Active recently</small>
+                    </div>
+                    <div class="library-stat">
+                        <strong>{{ ownedGameStats.neverPlayedPercentage }}%</strong>
+                        <small>Never played</small>
+                    </div>
+                </div>
+                <ng-template #noLibraryStats>
+                    <p class="card-empty">Steam library stats are currently unavailable.</p>
+                </ng-template>
+            </article>
         </div>
 
         <aside class="dashboard-sidebar" aria-label="Connections and game servers">

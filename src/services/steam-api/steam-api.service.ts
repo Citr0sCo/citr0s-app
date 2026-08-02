@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment";
 import {ISteamUserProfile} from "./types/steam-user-profile.type";
 import {ISteamUserProfileDecoration} from "./types/steam-user-profile-decoration.type";
 import {ISteamUserActivity} from "./types/steam-user-activity.type";
+import {ISteamOwnedGameStats} from "./types/steam-owned-game-stats.type";
 import {ISteamGameSummary} from "./types/steam-game-summary.type";
 
 @Injectable()
@@ -38,6 +39,22 @@ export class SteamApiService {
                     return {
                         avatarBorder: response.AvatarBorder,
                         profileBackground: response.ProfileBackground
+                    };
+                })
+            );
+    }
+
+    public getOwnedGameStats(steamId: string): Observable<ISteamOwnedGameStats> {
+        return this._httpClient.get<any>(`${environment.apiBaseUrl}/api/steam/${steamId}/stats`)
+            .pipe(
+                map((response: any): ISteamOwnedGameStats => {
+                    return {
+                        totalOwned: response.TotalOwned,
+                        played: response.Played,
+                        neverPlayed: response.NeverPlayed,
+                        recentlyActive: response.RecentlyActive,
+                        playedPercentage: response.PlayedPercentage,
+                        neverPlayedPercentage: response.NeverPlayedPercentage
                     };
                 })
             );

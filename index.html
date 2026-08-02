@@ -127,6 +127,10 @@
     .stack { display: grid; min-width: 0; gap: 16px; align-content: start; }
     .sidebar { align-self: stretch; }
     .card { background: rgba(19,25,35,.84); border: 1px solid var(--line); border-radius: var(--radius); padding: 23px; animation: rise .65s both cubic-bezier(.2,.7,.2,1); animation-delay: .08s; }
+    .library-stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .library-stat { min-width: 0; padding: 13px 14px; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.06); border-radius: 10px; }
+    .library-stat strong { display: block; color: var(--text); font-size: 20px; letter-spacing: -.04em; }
+    .library-stat small { display: block; margin-top: 5px; overflow: hidden; color: var(--quiet); font: 10px var(--mono); text-overflow: ellipsis; white-space: nowrap; }
     .card:nth-child(2) { animation-delay: .14s; }
     .card:nth-child(3) { animation-delay: .2s; }
     .card-head { display: flex; justify-content: space-between; align-items: start; gap: 14px; margin-bottom: 20px; }
@@ -230,6 +234,7 @@
       .profile-note { margin-top: 10px; line-height: 1.5; }
       .profile-footer { align-items: flex-start; flex-direction: column; gap: 12px; }
       .card { padding: 18px; border-radius: 15px; }
+      .library-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .activity-row { grid-template-columns: 42px minmax(0,1fr); gap: 10px; }
       .game-art { width: 42px; height: 42px; }
       .game-server-address { align-items: flex-start; flex-direction: column; gap: 4px; }
@@ -289,6 +294,16 @@
           </div>
           <div id="activity-list" class="activity-list" aria-live="polite">
             <p class="card-kicker">Loading Steam play history…</p>
+          </div>
+        </section>
+
+        <section class="card library-stats-card" aria-labelledby="library-stats-title">
+          <div class="card-head">
+            <div><h2 id="library-stats-title" class="card-title">Collection snapshot</h2><p class="card-kicker">Steam library</p></div>
+            <span id="library-count" class="count">Loading</span>
+          </div>
+          <div id="library-stats" class="library-stats-grid" aria-live="polite">
+            <p class="card-kicker">Loading library stats…</p>
           </div>
         </section>
 
@@ -385,6 +400,30 @@
       byId('profile-dot').className = `pulse-dot ${stateClass}`;
       byId('profile-status').textContent = state;
       byId('profile-last-online').textContent = stateClass === 'offline' ? `Last online ${formatDate(profile.LastOnline)}` : 'Currently online';
+    }
+
+    function renderLibraryStats(stats) {
+      const count = Number(stats?.TotalOwned);
+      byId('library-count').textContent = Number.isFinite(count) ? `${count} owned` : 'Unavailable';
+      const container = byId('library-stats');
+      container.replaceChildren();
+      if (!stats || stats.HasError) {
+        container.append(textNode('p', 'card-kicker', 'Steam library stats are currently unavailable.'));
+        return;
+      }
+
+      [
+        ['Total owned', stats.TotalOwned],
+        ['Played', stats.Played],
+        ['Active recently', stats.RecentlyActive],
+        ['Never played', `${stats.NeverPlayedPercentage}%`]
+      ].forEach(([label, value]) => {
+        const stat = document.createElement('div');
+        stat.className = 'library-stat';
+        stat.append(textNode('strong', '', String(value)));
+        stat.append(textNode('small', '', label));
+        container.append(stat);
+      });
     }
 
     function renderActivity(activity) {
@@ -502,6 +541,15 @@
         byId('profile-last-online').textContent = 'Try again later';
         byId('activity-count').textContent = 'Unavailable';
         byId('activity-list').replaceChildren(textNode('p', 'card-kicker', 'Steam activity could not be loaded.'));
+        renderLibraryStats(null);
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/api/steam/${STEAM_ID}/stats`);
+        if (!response.ok) throw new Error('Steam stats API unavailable');
+        renderLibraryStats(await response.json());
+      } catch (_) {
+        renderLibraryStats(null);
       }
 
       try {

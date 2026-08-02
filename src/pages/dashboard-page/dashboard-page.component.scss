@@ -206,11 +206,40 @@
 
 .dashboard-main {
     display: flex;
+    flex-direction: column;
+    gap: 22px;
 }
 
 .dashboard-main > .dashboard-card {
     width: 100%;
-    flex: 1;
+    flex: 0 1 auto;
+}
+
+.library-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.library-stat {
+    padding: 13px 14px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+}
+
+.library-stat strong {
+    display: block;
+    color: #fff;
+    font-size: 1.2rem;
+    letter-spacing: -0.04em;
+}
+
+.library-stat small {
+    display: block;
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.63rem;
 }
 
 .dashboard-sidebar {
@@ -654,6 +683,10 @@
 
     .game-server-list {
         grid-template-columns: 1fr;
+    }
+
+    .library-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .dashboard-card {

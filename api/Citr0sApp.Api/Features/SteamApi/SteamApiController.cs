@@ -34,4 +34,11 @@ public class SteamApiController : ControllerBase
         var response = await _service.GetRecentlyPlayed(steamId);
         return Ok(response);
     }
+
+    [HttpGet("{steamId}/stats")]
+    public async Task<ActionResult<SteamUserOwnedGameStatsResponse>> GetOwnedGameStats(string steamId)
+    {
+        var response = await _service.GetOwnedGameStats(steamId);
+        return Ok(response);
+    }
 }

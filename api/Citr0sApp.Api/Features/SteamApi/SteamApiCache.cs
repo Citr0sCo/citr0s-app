@@ -9,10 +9,14 @@ public class SteamApiCache
     private SteamUserProfileResponse? _cachedSteamUserProfileResponse = null;
     private SteamUserProfileDecorationResponse? _cachedSteamUserProfileDecorationResponse = null;
     private SteamUserRecentlyPlayedResponse? _cachedSteamUserRecentlyPlayedResponse = null;
+    private SteamUserOwnedGameStatsResponse? _cachedSteamUserOwnedGameStatsResponse = null;
+    private string? _cachedSteamUserOwnedGameStatsSteamId = null;
     private DateTime _cachedSteamUserProfileResponseLastLiveDataHit = DateTime.MinValue;
     private DateTime _cachedSteamUserProfileDecorationResponseLastLiveDataHit = DateTime.MinValue;
     private DateTime _cachedSteamUserRecentlyPlayedResponseLastLiveDataHit = DateTime.MinValue;
-    
+    private DateTime _cachedSteamUserOwnedGameStatsResponseLastLiveDataHit = DateTime.MinValue;
+
+    private readonly SemaphoreSlim _ownedGameStatsLock = new(1, 1);
     private readonly SteamApiService _service;
     private static SteamApiCache? _instance = null;
 
@@ -53,6 +57,29 @@ public class SteamApiCache
         _cachedSteamUserProfileDecorationResponse = response;
 
         return await Task.FromResult(_cachedSteamUserProfileDecorationResponse);
+    }
+
+    public async Task<SteamUserOwnedGameStatsResponse> GetOwnedGameStats(string steamId)
+    {
+        if (_cachedSteamUserOwnedGameStatsResponse != null && _cachedSteamUserOwnedGameStatsSteamId == steamId && _cachedSteamUserOwnedGameStatsResponseLastLiveDataHit.AddMinutes(_cacheIntervalInMinutes) > DateTime.Now)
+            return await Task.FromResult(_cachedSteamUserOwnedGameStatsResponse);
+
+        await _ownedGameStatsLock.WaitAsync();
+        try
+        {
+            if (_cachedSteamUserOwnedGameStatsResponse != null && _cachedSteamUserOwnedGameStatsSteamId == steamId && _cachedSteamUserOwnedGameStatsResponseLastLiveDataHit.AddMinutes(_cacheIntervalInMinutes) > DateTime.Now)
+                return await Task.FromResult(_cachedSteamUserOwnedGameStatsResponse);
+
+            var response = await _service.GetOwnedGameStats(steamId);
+            _cachedSteamUserOwnedGameStatsResponseLastLiveDataHit = DateTime.Now;
+            _cachedSteamUserOwnedGameStatsSteamId = steamId;
+            _cachedSteamUserOwnedGameStatsResponse = response;
+            return await Task.FromResult(_cachedSteamUserOwnedGameStatsResponse);
+        }
+        finally
+        {
+            _ownedGameStatsLock.Release();
+        }
     }
 
     public async Task<SteamUserRecentlyPlayedResponse> GetRecentlyPlayed(string steamId)
