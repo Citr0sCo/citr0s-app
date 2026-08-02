@@ -1,73 +1,135 @@
-<div class="welcome-page" *ngIf="!profile || !profileDecoration || !activity">
-    Loading...
+<div class="dashboard-loading" *ngIf="!profile || !profileDecoration || !activity">
+    <span class="loading-pulse"></span>
+    Loading Citr0s dashboard…
 </div>
 
-<div class="welcome-page" *ngIf="profile && profileDecoration && activity">
-    <div class="o-grid">
-        <div class="o-grid__col text-left u-ml-3">
-            <div class="o-grid o-grid__col--fixed">
-                <div class="o-grid__col o-grid__col--fixed" style="display:flex;">
-                    <div class="user-status user-status--{{ SteamUserStatus[profile.status].toLowerCase() }}"></div>
-                    <div style="margin-right:5px;background:url('{{ profileDecoration?.avatarBorder }}');padding: 5px; background-size: 100%;background-repeat: no-repeat;width: 50px;"><img src="{{ profile.avatarUrl }}" alt="" style="height:40px;"></div>
-                    <h1 style="margin:0;line-height:40px;display:flex;align-items: flex-end;">{{ profile.username }}</h1>
-                    <small *ngIf="SteamUserStatus[profile.status].toLowerCase() === 'offline'" style="color:rgba(255, 255, 255, 0.25);margin-left:5px;font-size:0.75rem;font-style: italic;display:flex;align-items: flex-end;">Last online {{ profile.lastOnline | date : 'EEEE, d MMM, y @ HH:mm' }}</small>
-                    <small *ngIf="SteamUserStatus[profile.status].toLowerCase() !== 'offline'" style="color:forestgreen;margin-left:5px;font-size:0.75rem;font-style: italic;display:flex;align-items: flex-end;">Online</small>
+<main class="dashboard" *ngIf="profile && profileDecoration && activity">
+    <section class="dashboard-hero" aria-labelledby="profile-heading">
+        <div class="hero-copy">
+            <span class="eyebrow">Citr0s personal dashboard</span>
+            <div class="profile-heading">
+                <div class="avatar-frame" [style.background-image]="'url(' + profileDecoration.avatarBorder + ')'">
+                    <img [src]="profile.avatarUrl" [alt]="profile.username + ' Steam avatar'">
+                </div>
+                <div>
+                    <div class="profile-name-row">
+                        <span class="presence-dot presence-dot--{{ getSteamStatusClass() }}" aria-hidden="true"></span>
+                        <h1 id="profile-heading">{{ profile.username }}</h1>
+                    </div>
+                    <p class="profile-state" [class.profile-state--offline]="getSteamStatusClass() === 'offline'">
+                        {{ getSteamStatusLabel() }}
+                        <span *ngIf="getSteamStatusClass() === 'offline' && profile.lastOnline"> · last online {{ profile.lastOnline | date : 'MMM d, y @ HH:mm' }}</span>
+                    </p>
                 </div>
             </div>
-            <hr>
-            <div class="o-grid__col" style="display:flex;flex-direction: column;">
-                <h4>Recent Activity</h4>
-                @for (game of activity.games | slice:0:3; track game.appId) {
-                    <a href="https://store.steampowered.com/app/{{ game.appId }}" target="_blank" style="text-decoration: none; color:#fff;">
-                        <div class="recent-game" style="display:flex;align-items: center;margin-bottom:5px;">
-                            <img src="{{ game.iconUrl }}" style="height:25px;"> <small style="margin-left:5px;font-size:0.75rem;display:flex;align-items: flex-end;">{{ game.name }} - {{ displayTimeFrom(game.playtimeLastTwoWeeksInMinutes) }} <span style="color:rgba(255, 255, 255, 0.25);margin-left:5px;font-size:0.75rem;font-style: italic;">({{ displayTimeFrom(game.playtimeForeverInMinutes) }})</span></small>
-                        </div>
+            <p class="hero-description">A small window into what I’m playing, what’s online, and how the network is behaving.</p>
+        </div>
+        <div class="hero-metric">
+            <span>Recent playtime</span>
+            <strong>{{ getRecentPlaytime() }}</strong>
+            <small>across tracked games</small>
+        </div>
+    </section>
+
+    <section class="dashboard-grid" aria-label="Dashboard overview">
+        <article class="dashboard-card activity-card">
+            <div class="card-heading">
+                <div>
+                    <span class="eyebrow">Steam</span>
+                    <h2>Recent activity</h2>
+                </div>
+                <span class="card-count">{{ activity.games.length }} games</span>
+            </div>
+
+            <div class="activity-list" *ngIf="activity.games.length; else noActivity">
+                @for (game of activity.games | slice:0:4; track game.appId) {
+                    <a class="activity-row" [href]="'https://store.steampowered.com/app/' + game.appId" target="_blank" rel="noopener noreferrer">
+                        <img [src]="game.iconUrl" [alt]="game.name + ' icon'">
+                        <span class="activity-game">
+                            <strong>{{ game.name }}</strong>
+                            <small>{{ displayTimeFrom(game.playtimeLastTwoWeeksInMinutes) }} in the last two weeks</small>
+                        </span>
+                        <span class="activity-total">{{ displayTimeFrom(game.playtimeForeverInMinutes) }}<small>lifetime</small></span>
                     </a>
                 }
             </div>
-            <hr>
-            <div>
-                <h4>Voice Servers <small style="font-size:0.75rem; color:rgba(255, 255, 255, 0.25);">IP: ts3.citr0s.com</small></h4>
-                <a href="https://discord.gg/BA4bcGQdRy" target="_blank">
-                    <div class="btn btn-discord">
-                        <img src="assets/apps/discord.png" alt="cit0s">
-                        Discord
-                    </div>
+            <ng-template #noActivity>
+                <p class="card-empty">No recent Steam activity is available.</p>
+            </ng-template>
+        </article>
+
+        <article class="dashboard-card actions-card">
+            <div class="card-heading">
+                <div>
+                    <span class="eyebrow">Connect</span>
+                    <h2>Quick links</h2>
+                </div>
+            </div>
+            <div class="action-list">
+                <a class="action-row" href="https://discord.gg/BA4bcGQdRy" target="_blank" rel="noopener noreferrer">
+                    <span class="action-icon"><img src="assets/apps/discord.png" alt=""></span>
+                    <span><strong>Discord</strong><small>Join the community</small></span>
+                    <span class="action-arrow">↗</span>
                 </a>
-                <a href="ts3server://ts3.citr0s.com?port=9987" target="_blank">
-                    <div class="btn btn-teamspeak3 u-ml-1">
-                        <img src="assets/apps/teamspeak3.png" alt="cit0s">
-                        TeamSpeak3
-                    </div>
+                <a class="action-row" href="ts3server://ts3.citr0s.com?port=9987">
+                    <span class="action-icon"><img src="assets/apps/teamspeak3.png" alt=""></span>
+                    <span><strong>TeamSpeak 3</strong><small>ts3.citr0s.com</small></span>
+                    <span class="action-arrow">↗</span>
                 </a>
             </div>
-            <hr>
+        </article>
+    </section>
+
+    <section class="dashboard-card server-card" aria-labelledby="server-status-heading">
+        <div class="card-heading server-card__heading">
             <div>
-                <h4>Game Servers <small style="font-size:0.75rem; color:rgba(255, 255, 255, 0.25);">IP: server.citr0s.com</small></h4>
-                <ul style="padding-left:15px;">
-                    <li>Terraria</li>
-                    <li>Minecraft Java</li>
-                    <li>Minecraft Bedrock</li>
-                    <li>Core Keeper</li>
-                    <li>Open TTD</li>
-                    <li>Factorio</li>
-                </ul>
+                <span class="eyebrow">Infrastructure</span>
+                <h2 id="server-status-heading">Server status</h2>
+                <p *ngIf="uptimeStatus">{{ getOnlineMonitorCount() }} of {{ uptimeStatus.monitors.length }} monitors online · checked {{ uptimeStatus.retrievedAt | date : 'HH:mm:ss' }}</p>
+                <p *ngIf="!uptimeStatus && !isUptimeKumaLoading">Live status is currently unavailable.</p>
             </div>
+            <a class="card-link" href="https://status.citr0s.com/status/default" target="_blank" rel="noopener noreferrer">Open status page ↗</a>
         </div>
-    </div>
 
-    <hr>
+        <div class="server-loading" *ngIf="isUptimeKumaLoading">Loading server status…</div>
+        <div class="card-empty" *ngIf="!isUptimeKumaLoading && !uptimeStatus?.monitors?.length">No Uptime Kuma monitors are available.</div>
 
-    <iframe src="https://status.citr0s.com/status/default" class="status-iframe" width="100%" height="100%" allowtransparency="yes"></iframe>
+        @for (group of getUptimeGroups(); track group) {
+            <div class="server-group" *ngIf="getMonitors(group).length">
+                <h3>{{ group }}</h3>
+                @for (monitor of getMonitors(group); track monitor.id) {
+                    <div class="server-row">
+                        <div class="server-name">
+                            <span class="status-dot status-dot--{{ getMonitorStatusClass(monitor) }}" aria-hidden="true"></span>
+                            <strong>{{ monitor.name }}</strong>
+                        </div>
+                        <div class="server-history" *ngIf="monitor.history.length" aria-label="Recent uptime history">
+                            @for (heartbeat of monitor.history; track $index) {
+                                <span class="history-bar history-bar--{{ getHeartbeatStatusClass(heartbeat.status) }}" [title]="heartbeat.time | date : 'MMM d, HH:mm' : 'UTC'" aria-hidden="true"></span>
+                            }
+                        </div>
+                        <div class="server-meta">
+                            <strong>{{ getMonitorStatusLabel(monitor) }}</strong>
+                            <small *ngIf="monitor.uptime24Hours !== null">{{ displayUptime(monitor.uptime24Hours) }} / 24h</small>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
 
-    <hr>
+    <section class="dashboard-card latency-card" aria-labelledby="latency-heading">
+        <div class="card-heading">
+            <div>
+                <span class="eyebrow">Network</span>
+                <h2 id="latency-heading">Latency history</h2>
+            </div>
+            <a class="card-link" href="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917" target="_blank" rel="noopener noreferrer">View full graph ↗</a>
+        </div>
+        <a class="latency-graph" href="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917" target="_blank" rel="noopener noreferrer">
+            <img alt="Broadband latency history" src="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917-2.png">
+        </a>
+    </section>
 
-    <a title="Broadband Ping" href="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917" class="isp-graph">
-        <img alt="My Broadband Ping - Lila Connect" src="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917-2.png">
-    </a>
-
-    <hr>
-
-    <p class="text-small">&copy; {{ currentYear }} Citr0s</p>
-
-</div>
+    <footer class="dashboard-footer">&copy; {{ currentYear }} Citr0s</footer>
+</main>
