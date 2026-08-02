@@ -23,6 +23,7 @@
                 </div>
             </div>
             <p class="hero-description">A small window into what I’m playing, what’s online, and how the network is behaving.</p>
+            <a class="profile-link" [href]="profile.profileUrl" target="_blank" rel="noopener noreferrer">View Steam profile ↗</a>
         </div>
         <div class="hero-metric">
             <span>Recent playtime</span>
@@ -72,11 +73,36 @@
                     <span class="action-arrow">↗</span>
                 </a>
                 <a class="action-row" href="ts3server://ts3.citr0s.com?port=9987">
-                    <span class="action-icon"><img src="assets/apps/teamspeak3.png" alt=""></span>
+                    <span class="action-icon action-icon--teamspeak"><img src="assets/apps/teamspeak3.png" alt=""></span>
                     <span><strong>TeamSpeak 3</strong><small>ts3.citr0s.com</small></span>
                     <span class="action-arrow">↗</span>
                 </a>
             </div>
+        </article>
+
+        <article class="dashboard-card game-servers-card" aria-labelledby="game-servers-heading">
+            <div class="card-heading">
+                <div>
+                    <span class="eyebrow">Play together</span>
+                    <h2 id="game-servers-heading">Game servers</h2>
+                </div>
+                <span class="card-count">6 titles</span>
+            </div>
+            <div class="server-address-row">
+                <span>
+                    <small>Game Servers IP</small>
+                    <code>server.citr0s.com</code>
+                </span>
+                <button class="server-ip-copy" type="button" (click)="copyServerAddress()">{{ serverAddressCopied ? 'Copied' : 'Copy IP' }}</button>
+            </div>
+            <ul class="game-server-list">
+                <li>Terraria</li>
+                <li>Minecraft Java</li>
+                <li>Minecraft Bedrock</li>
+                <li>Core Keeper</li>
+                <li>Open TTD</li>
+                <li>Factorio</li>
+            </ul>
         </article>
     </section>
 

@@ -24,7 +24,10 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     public activity: ISteamUserActivity | null = null;
     public uptimeStatus: IUptimeKumaStatus | null = null;
     public isUptimeKumaLoading: boolean = true;
+    public serverAddressCopied: boolean = false;
     public SteamUserStatus = SteamUserStatus;
+
+    private readonly _gameServersAddress: string = 'server.citr0s.com';
 
     private readonly _destroy: Subject<void> = new Subject();
     private readonly _steamApiService: SteamApiService;
@@ -151,6 +154,16 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         const minutes = totalMinutes % 60;
 
         return `${hours}h ${minutes}m`;
+    }
+
+    public async copyServerAddress(): Promise<void> {
+        try {
+            await navigator.clipboard.writeText(this._gameServersAddress);
+            this.serverAddressCopied = true;
+            window.setTimeout(() => this.serverAddressCopied = false, 1800);
+        } catch (_) {
+            this.serverAddressCopied = false;
+        }
     }
 
     public ngOnDestroy(): void {
