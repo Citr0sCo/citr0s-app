@@ -10,5 +10,7 @@ services:
             - ASPNETCORE_PUSHOVER_USER=<YOUR_PUSHOVER_USER>
             - ASPNETCORE_TRAKT_API_KEY=<YOUR_TRAKT_API_KEY>
             - ASPNETCORE_TMDB_API_KEY=<YOUR_TMDB_API_KEY>
+            - ASPNETCORE_UPTIME_KUMA_BASE_URL=https://status.citr0s.com
+            - ASPNETCORE_UPTIME_KUMA_API_KEY=<YOUR_UPTIME_KUMA_API_KEY>
         volumes:
             - ./assets:/web-api/app/assets

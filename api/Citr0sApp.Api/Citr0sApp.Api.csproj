@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Fennel" Version="0.3.0" />
         <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.10" />
         <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
