@@ -75,7 +75,15 @@ public sealed class UptimeKumaService
             using var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return ParseMetrics(body);
+            try
+            {
+                return ParseMetrics(body);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogWarning(exception, "Unable to parse authenticated Uptime Kuma metrics; falling back to heartbeat status.");
+                return [];
+            }
         }
         catch (HttpRequestException exception)
         {
@@ -178,7 +186,7 @@ public sealed class UptimeKumaService
         {
             foreach (var property in uptimeList.EnumerateObject())
             {
-                if (property.Value.TryGetDouble(out var uptime))
+                if (property.Value.ValueKind == JsonValueKind.Number && property.Value.TryGetDouble(out var uptime))
                     uptimeById[property.Name] = uptime;
             }
         }
@@ -197,7 +205,7 @@ public sealed class UptimeKumaService
         {
             Status = GetInt32(value, "status"),
             Time = time,
-            Ping = value.TryGetProperty("ping", out var ping) && ping.TryGetDouble(out var pingValue) ? pingValue : null,
+            Ping = GetDouble(value, "ping"),
             Message = GetString(value, "msg")
         };
     }
@@ -211,8 +219,19 @@ public sealed class UptimeKumaService
 
     private static int GetInt32(JsonElement element, string propertyName)
     {
-        return element.TryGetProperty(propertyName, out var property) && property.TryGetInt32(out var value)
-            ? value
-            : 0;
+        return element.TryGetProperty(propertyName, out var property)
+            && property.ValueKind == JsonValueKind.Number
+            && property.TryGetInt32(out var value)
+                ? value
+                : 0;
+    }
+
+    private static double? GetDouble(JsonElement element, string propertyName)
+    {
+        return element.TryGetProperty(propertyName, out var property)
+            && property.ValueKind == JsonValueKind.Number
+            && property.TryGetDouble(out var value)
+                ? value
+                : null;
     }
 }
