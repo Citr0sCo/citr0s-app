@@ -9,29 +9,49 @@ import { ISteamUserActivity } from '../../services/steam-api/types/steam-user-ac
 import { ISteamOwnedGameStats } from '../../services/steam-api/types/steam-owned-game-stats.type';
 import { IUptimeKumaStatus, IUptimeKumaMonitor } from '../../services/uptime-kuma/types/uptime-kuma-status.type';
 
+declare const jasmine: any;
+
 describe('DashboardPageComponent', () => {
     let component: DashboardPageComponent;
     let fixture: ComponentFixture<DashboardPageComponent>;
-    let mockSteamApiService: jasmine.SpyObj<SteamApiService>;
-    let mockUptimeKumaService: jasmine.SpyObj<UptimeKumaService>;
+    let mockSteamApiService: any;
+    let mockUptimeKumaService: any;
 
     const mockProfile: ISteamUserProfile = {
+        avatarUrl: 'https://example.com/avatar.png',
+        lastOnline: new Date(1234567890),
+        profileUrl: 'https://steamcommunity.com/id/test-user',
         status: 1,
-        name: 'Test User',
-        avatarHash: 'test-hash',
-        lastLogoff: 1234567890
+        username: 'Test User'
     };
 
     const mockActivity: ISteamUserActivity = {
+        total: 2,
         games: [
-            { playtimeLastTwoWeeksInMinutes: 60, name: 'Game 1' },
-            { playtimeLastTwoWeeksInMinutes: 120, name: 'Game 2' }
+            {
+                appId: 1,
+                iconUrl: 'https://example.com/game-1.png',
+                name: 'Game 1',
+                playtimeForeverInMinutes: 100,
+                playtimeLastTwoWeeksInMinutes: 60
+            },
+            {
+                appId: 2,
+                iconUrl: 'https://example.com/game-2.png',
+                name: 'Game 2',
+                playtimeForeverInMinutes: 200,
+                playtimeLastTwoWeeksInMinutes: 120
+            }
         ]
     };
 
     const mockOwnedGameStats: ISteamOwnedGameStats = {
-        totalPlayTimeHours: 50,
-        totalGames: 10
+        totalOwned: 10,
+        played: 5,
+        neverPlayed: 5,
+        recentlyActive: 2,
+        playedPercentage: 50,
+        neverPlayedPercentage: 50
     };
 
     const mockUptimeStatus: IUptimeKumaStatus = {
@@ -61,8 +81,13 @@ describe('DashboardPageComponent', () => {
     };
 
     beforeEach(async () => {
-        const steamApiSpy = jasmine.createSpyObj<SteamApiService>('SteamApiService', ['getUserProfile', 'getUserProfileDecoration', 'getUserActivity', 'getOwnedGameStats']);
-        const uptimeKumaSpy = jasmine.createSpyObj<UptimeKumaService>('UptimeKumaService', ['getStatus']);
+        const steamApiSpy = jasmine.createSpyObj('SteamApiService', ['getUserProfile', 'getUserProfileDecoration', 'getUserActivity', 'getOwnedGameStats']);
+        const uptimeKumaSpy = jasmine.createSpyObj('UptimeKumaService', ['getStatus']);
+        steamApiSpy.getUserProfile.and.returnValue(of(null));
+        steamApiSpy.getUserProfileDecoration.and.returnValue(of(null));
+        steamApiSpy.getUserActivity.and.returnValue(of(null));
+        steamApiSpy.getOwnedGameStats.and.returnValue(of(null));
+        uptimeKumaSpy.getStatus.and.returnValue(of(null));
 
         await TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
@@ -75,8 +100,8 @@ describe('DashboardPageComponent', () => {
 
         fixture = TestBed.createComponent(DashboardPageComponent);
         component = fixture.componentInstance;
-        mockSteamApiService = TestBed.inject(SteamApiService) as jasmine.SpyObj<SteamApiService>;
-        mockUptimeKumaService = TestBed.inject(UptimeKumaService) as jasmine.SpyObj<UptimeKumaService>;
+        mockSteamApiService = TestBed.inject(SteamApiService) as any;
+        mockUptimeKumaService = TestBed.inject(UptimeKumaService) as any;
     });
 
     it('should create', () => {
@@ -131,7 +156,7 @@ describe('DashboardPageComponent', () => {
 
             expect(mockUptimeKumaService.getStatus).toHaveBeenCalled();
             expect(component.uptimeStatus).toBe(mockUptimeStatus);
-            expect(component.isUptimeKumaLoading).toBeFalse();
+            expect(component.isUptimeKumaLoading).toBe(false);
         });
 
         it('should handle uptime kuma API errors gracefully', () => {
@@ -141,7 +166,7 @@ describe('DashboardPageComponent', () => {
             fixture.detectChanges();
 
             expect(component.uptimeStatus).toBeNull();
-            expect(component.isUptimeKumaLoading).toBeFalse();
+            expect(component.isUptimeKumaLoading).toBe(false);
         });
     });
 
@@ -245,7 +270,7 @@ describe('DashboardPageComponent', () => {
             component.activity = mockActivity;
             
             const result = component.getRecentPlaytime();
-            expect(result).toBe('2h 30m');
+            expect(result).toBe('3h 0m');
         });
 
         it('should return zero time when no activity data', () => {
@@ -272,25 +297,24 @@ describe('DashboardPageComponent', () => {
     });
 
     describe('copyServerAddress', () => {
-        let originalClipboard: any;
+        let originalWriteText: typeof navigator.clipboard.writeText;
 
         beforeEach(() => {
-            originalClipboard = navigator.clipboard;
+            originalWriteText = navigator.clipboard.writeText;
         });
 
         afterEach(() => {
-            // Restore original clipboard API
-            (navigator as any).clipboard = originalClipboard;
+            (navigator.clipboard as any).writeText = originalWriteText;
         });
 
         it('should copy server address to clipboard successfully', async () => {
             const mockWriteText = jasmine.createSpy().and.returnValue(Promise.resolve());
-            (navigator as any).clipboard = { writeText: mockWriteText };
+            (navigator.clipboard as any).writeText = mockWriteText;
 
             await component.copyServerAddress();
             
             expect(mockWriteText).toHaveBeenCalledWith('server.citr0s.com');
-            expect(component.serverAddressCopied).toBeTrue();
+            expect(component.serverAddressCopied).toBe(true);
         });
     });
 });
