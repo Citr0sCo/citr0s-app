@@ -376,7 +376,11 @@
     border-radius: 9px;
 }
 
-.action-icon--discord img,
+.action-icon--discord img {
+    width: 25px;
+    height: 26px;
+}
+
 .action-icon--teamspeak img {
     width: 21px;
     height: 21px;
