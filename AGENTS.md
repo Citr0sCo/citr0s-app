@@ -32,6 +32,18 @@ failure is caused by:
 Do not claim success unless the validation commands actually complete
 successfully.
 
+## GitHub pull requests
+
+- Push feature branches with the registered `GITHUB_PERSONAL_ACCESS_TOKEN` using
+  an `x-access-token` HTTPS remote, for example:
+  `git remote set-url origin https://x-access-token:${GITHUB_PERSONAL_ACCESS_TOKEN}@github.com/Citr0sCo/citr0s-app.git`
+- Never push directly to `main`; update the existing feature branch for an open
+  pull request.
+- If a push is rejected because the remote is ahead, run
+  `git pull --rebase origin <branch>` and retry the push.
+- Use the GitHub API/CLI for pull-request and workflow operations, and verify
+  the resulting checks before reporting completion.
+
 ## Safety
 
 Do not:
