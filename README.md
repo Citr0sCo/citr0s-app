@@ -16,30 +16,6 @@
   <img src="https://img.shields.io/badge/Coverage-85%25-brightgreen" alt="Code Coverage">
 </p>
 
-## 🧪 Test Coverage
-
-This project maintains high test coverage to ensure code quality and prevent regressions. Tests are automatically run as part of the build process on every push and pull request, with coverage reports generated and uploaded to [Codecov](https://codecov.io/).
-
-Tests include:
-- Component tests (DashboardPageComponent)
-- Service tests 
-- Utility function tests
-- Integration tests
-
-The current coverage badge shows 85% test coverage across the application. This badge updates automatically after each successful build.
-
-### How It Works
-1. Tests run via Karma with Istanbul code coverage as part of the build workflow
-2. Coverage reports are generated in lcov format 
-3. Reports are uploaded to Codecov automatically 
-4. The badge is updated automatically based on Codecov metrics
-5. Coverage artifacts are stored for review
-
-**Note**: To enable full coverage reporting in your local environment, run:
-```bash
-npm run test-ci
-```
-
 ---
 
 <h4 align="center">Citr0s web profile.</h4>
