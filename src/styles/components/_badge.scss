@@ -14,7 +14,7 @@
         border-radius: $border-radius;
         font-size: 0.6rem;
         line-height: 0.6rem;
-        background: transparentize($brand-primary, 0.25);
+        background: rgba($brand-primary, 0.75);
         position: relative;
         border: 1px solid $brand-primary;
         margin: 3px;
@@ -25,12 +25,12 @@
 
         &--warning {
             border-color: $warning-color;
-            background: transparentize($warning-color, 0.25);
+            background: rgba($warning-color, 0.75);
         }
 
         &--danger {
             border-color: $danger-color;
-            background: transparentize($danger-color, 0.25);
+            background: rgba($danger-color, 0.75);
         }
     }
 }

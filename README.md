@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Coverage-85%25-brightgreen" alt="Code Coverage">
+  <a href="https://codecov.io/gh/Citr0sCo/citr0s-app"><img src="https://codecov.io/gh/Citr0sCo/citr0s-app/branch/main/graph/badge.svg" alt="Code Coverage"></a>
 </p>
 
 ---
