@@ -90,6 +90,19 @@
                     <p class="card-empty">Steam library stats are currently unavailable.</p>
                 </ng-template>
             </article>
+
+            <article class="dashboard-card latency-card" aria-labelledby="latency-heading">
+                <div class="card-heading">
+                    <div>
+                        <span class="eyebrow">Network</span>
+                        <h2 id="latency-heading">Latency history</h2>
+                    </div>
+                    <a class="card-link" href="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917" target="_blank" rel="noopener noreferrer">View full graph ↗</a>
+                </div>
+                <a class="latency-graph" href="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917" target="_blank" rel="noopener noreferrer">
+                    <img alt="Broadband latency history" src="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917-2.png">
+                </a>
+            </article>
         </div>
 
         <aside class="dashboard-sidebar" aria-label="Connections and game servers">
@@ -208,19 +221,6 @@
                 }
             </div>
         }
-    </section>
-
-    <section class="dashboard-card latency-card" aria-labelledby="latency-heading">
-        <div class="card-heading">
-            <div>
-                <span class="eyebrow">Network</span>
-                <h2 id="latency-heading">Latency history</h2>
-            </div>
-            <a class="card-link" href="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917" target="_blank" rel="noopener noreferrer">View full graph ↗</a>
-        </div>
-        <a class="latency-graph" href="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917" target="_blank" rel="noopener noreferrer">
-            <img alt="Broadband latency history" src="https://www.thinkbroadband.com/broadband/monitoring/quality/share/8ff2150182b7f965ef64dfa4957dc434f6b20917-2.png">
-        </a>
     </section>
 
     <footer class="dashboard-footer">&copy; {{ currentYear }} Citr0s</footer>
