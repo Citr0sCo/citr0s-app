@@ -57,8 +57,15 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
 
+      - name: Install Chromium
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends chromium
+
       - name: Run tests with coverage
-        run: npm run test-ci
+        run: |
+          export CHROME_BIN="$(command -v chromium)"
+          npm run test-ci
 
       - name: Check coverage files exist
         run: |
