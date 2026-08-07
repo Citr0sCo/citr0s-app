@@ -62,10 +62,10 @@
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "21.4.0"
 
-"@angular/animations@^22.1.0":
-  version "22.1.0"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-22.1.0.tgz#6c07e855b3cc296846423a105233275bc710b97b"
-  integrity sha512-MHXOXmn9zmkiq234J+pr2Ir4A+z1iiVmQ0WjQ4skvK8GHTjnjeHKb4HrpAo5f7S3W0oenszmkNCddTQ3pvoJPw==
+"@angular/animations@^22.1.1":
+  version "22.1.1"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-22.1.1.tgz#ce87fdc973569b88cd163735027d89c9f303129c"
+  integrity sha512-97+EXulzVZ7+5pFqS7mooiZxNKu7eh/vv4BIWaatjLBg2Ctpv2nHotXcWMMfD4gpX6skCdJWluSnmDP1iPc2ig==
   dependencies:
     tslib "^2.3.0"
 
@@ -167,10 +167,10 @@
     tslib "^2.3.0"
     zod "^4.0.10"
 
-"@angular/platform-browser-dynamic@^22.1.0":
-  version "22.1.0"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-22.1.0.tgz#ba889e0b8b3e548fbf4e3ed7d378a7e9089addec"
-  integrity sha512-iLn9vCk6HhxQZhFJIEBjHH1CbyOLEABw0Do3VAzly2YimemitgQEmTLJ5a96qd70rYmpJH6zudhnYqUjyaI6Ig==
+"@angular/platform-browser-dynamic@^22.1.1":
+  version "22.1.1"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-22.1.1.tgz#c6ecead3f7f519a6d4bad0b03ca00dde0d362a56"
+  integrity sha512-r3UVNjW4Ew9DDTK0pnUGQ4gFmms4XjciM1wRqiMAI4iHXzh76tonvZ1PYio2ON+7pl9u1ETq294NTWag9hVYWA==
   dependencies:
     tslib "^2.3.0"
 
