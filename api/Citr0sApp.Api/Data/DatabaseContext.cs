@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Citr0sApp.Api.Data;
 
@@ -16,6 +17,9 @@ public class DatabaseContext : DbContext
     {
         Directory.CreateDirectory("assets");
         optionsBuilder.UseSqlite("Data Source=assets/citr0s-app.db");
+
+        // EF Core 11 throws on MigrationsNotFound; this context has no migrations, so keep EF 10's log-and-continue behavior.
+        optionsBuilder.ConfigureWarnings(warnings => warnings.Log(RelationalEventId.MigrationsNotFound));
         
         var value = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         if (value == "Development")

@@ -10,9 +10,7 @@ public class PasswordHasher
         byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
         byte[] saltBytes = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("ASPNETCORE_PASSWORD_SALT")!);
 
-        using var pbkdf2 = new Rfc2898DeriveBytes(passwordBytes, saltBytes, iterations, HashAlgorithmName.SHA256);
-
-        byte[] hash = pbkdf2.GetBytes(keySize);
+        byte[] hash = Rfc2898DeriveBytes.Pbkdf2(passwordBytes, saltBytes, iterations, HashAlgorithmName.SHA256, keySize);
 
         return Convert.ToBase64String(hash);
     }
